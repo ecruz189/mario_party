@@ -1,7 +1,7 @@
 
 # %%
 import numpy as np
-from numpy.random.mtrand import randint, random_integers
+from numpy.random.mtrand import randint
 import pandas as pd
 
 dice1 = [1, 2, 3, 4, 5, 6]
@@ -39,7 +39,7 @@ def comp_func(turns, reps):
 
     total_wins = {}
     for dice in dice_list_names:
-        total_wins[dice] = [0, 0]
+        total_wins[dice] = [0, 0, []]
     for rep in range(reps):
         total_steps = {}
         for dice in comb_list:
@@ -56,9 +56,11 @@ def comp_func(turns, reps):
         total_wins[die[0]][1] = np.array(die[1]).sum()
     sorted_total_sum = sorted(total_wins.items(), key=lambda char:char[1], reverse=True)
 
+    for die in comb_list:
+        total_wins[die[0]][2] = die[1]
     return sorted_total_wins, total_wins
 
 comp_func(10, 2100)
 
-df = pd.DataFrame.from_dict(total_wins, orient='index', columns=['Number of wins', 'Sum of die']).sort_values(by='Number of wins', ascending=False)
+df = pd.DataFrame.from_dict(total_wins, orient='index', columns=['Number of wins', 'Sum of die', 'Die']).sort_values(by='Number of wins', ascending=False)
 print(df)
